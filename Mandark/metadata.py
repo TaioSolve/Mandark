@@ -8,7 +8,7 @@ Information describing the project.
 package = 'Mandark'
 project = "Mandark"
 project_no_spaces = project.replace(' ', '')
-version = '0.0.1'
+version = '0.0.2'
 description = 'Change Control Software with the power of Flask'
 authors = ['Allan Swanepoel']
 authors_string = ', '.join(authors)

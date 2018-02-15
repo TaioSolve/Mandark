@@ -1,2 +1,9 @@
-# Python 2.6 compatibility
-# argparse==1.2.1
+Flask
+Flask-Admin
+Flask-Cors
+Flask-Migrate
+Flask-Script
+Flask-Security
+Flask-SQLAlchemy
+pyjwt
+gunicorn

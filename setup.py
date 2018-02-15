@@ -265,7 +265,7 @@ setup_dict = dict(
     zip_safe=False,  # don't use eggs
     entry_points={
         'console_scripts': [
-            'Mandark_cli = Mandark.main:entry_point'
+            'Mandark = Mandark:app'
         ],
         # if you have a gui, use this
         # 'gui_scripts': [
