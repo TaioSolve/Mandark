@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from Mandark.project import db
+from Mandark.project.app import db
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask_security import UserMixin, RoleMixin
-from werkzeug.security import generate_password_hash, check_password_hash
 from jwt import encode as jwtencode, decode as jwtdecode
 from jwt import InvalidTokenError, ExpiredSignatureError
 from datetime import datetime, timedelta
+from werkzeug.security import gen_salt
 """
 We need a table to relate users to roles by id.
 This is an example of a many-to-many relationship in SQLAlchemy
@@ -53,10 +53,6 @@ class User(db.Model, UserMixin):
         """Lame example of hybrid property"""
         return self.has_role('admin')
 
-    @property
-    def password(self):
-        raise AttributeError('Password is not a readable attribute')
-
     def is_active(self):
         return self.active
 
@@ -64,12 +60,9 @@ class User(db.Model, UserMixin):
     def is_anonymous(self):
         return False
 
-    @password.setter
-    def password(self, password):
-        self.password = generate_password_hash(password)
-
-    def verify_password(self, password):
-        return check_password_hash(self.password, password)
+    @property
+    def is_authenticated(self):
+        return True
 
     @staticmethod
     def encode_auth_token(user_id):

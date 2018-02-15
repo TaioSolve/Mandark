@@ -1,5 +1,5 @@
 from flask_admin import AdminIndexView, BaseView
-from flask_security import current_user
+from flask_security import current_user, utils
 from flask_admin.contrib.sqla.view import ModelView
 from flask import redirect, url_for, flash
 from wtforms import PasswordField, validators
@@ -36,6 +36,10 @@ class UserModelView(AdminModelView):
                                                         'password',
                                                         message='Passwords must match')])}  # noqa
     form_columns = ('roles', 'email', 'password', 'password2', 'active')
+
+    def on_model_change(self, form, model, is_created):
+        if form.password.data:
+            model.password = utils.encrypt_password(model.password)
 
 
 class RoleModelView(AdminModelView):

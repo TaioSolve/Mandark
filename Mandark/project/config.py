@@ -16,7 +16,11 @@ class BaseConfig:
     CSRF_ENABLED = True
     TOKEN_EXPIRATION_DAYS = 30
     TOKEN_EXPIRATION_SECONDS = 0
+    SECURITY_PASSWORD_SALT = 'yH41YQQF5qbxZnYA'
 
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
+
+class ProductionConfig(BaseConfig):
+    DEBUG = False
