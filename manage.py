@@ -7,12 +7,12 @@ from Mandark.project import create_app, db
 
 
 app = create_app()
-manager = Manager()
+manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 
 @manager.command
-def recreated_db():
+def recreate_db():
     """Recreates the database."""
     db.drop_all()
     db.create_all()
