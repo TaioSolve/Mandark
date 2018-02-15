@@ -14,6 +14,8 @@ class BaseConfig:
     # print(binascii.hexlify(os.urandom(24)))
     SECRET_KEY = "3833bffa12a864aaa90b8dda70d5c11694ab2ecfa3a99455"
     CSRF_ENABLED = True
+    TOKEN_EXPIRATION_DAYS = 30
+    TOKEN_EXPIRATION_SECONDS = 0
 
 
 class DevelopmentConfig(BaseConfig):
