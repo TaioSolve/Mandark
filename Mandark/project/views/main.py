@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, g, Blueprint
-from flask_security import current_user, login_required
+from flask import render_template, g, Blueprint, flash
+from flask_security import login_required
 from Mandark.project.forms import ExampleForm
 from Mandark.project.models import User
 
@@ -24,10 +24,9 @@ def exampleform():
     form = ExampleForm()
     form.user.choices = [ (x.email, x.email) for x in User.query.all()]
     if form.validate_on_submit():
-        flash("Good job you filled out the form: {}, {}, {}, {}".format(form.user.data,
-                                                                         form.anumber.data,
-                                                                         form.text.data,
-                                                                         form.checkbox.data),
+        flash("Good job you filled out the form: {}, {}, {}, {}".
+              format(form.user.data, form.anumber.data, form.text.data,
+                     form.checkbox.data),
               category="good")
     else:
         form.flash_errors()

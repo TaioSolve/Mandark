@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 from Mandark.project.app import db
-from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask_security import UserMixin, RoleMixin
-from jwt import encode as jwtencode, decode as jwtdecode
-from jwt import InvalidTokenError, ExpiredSignatureError
-from datetime import datetime, timedelta
-from werkzeug.security import gen_salt
+
 """
 We need a table to relate users to roles by id.
 This is an example of a many-to-many relationship in SQLAlchemy
@@ -17,6 +13,18 @@ roles_users = db.Table('roles_users',
                                  db.ForeignKey('user.id')),
                        db.Column('role_id', db.Integer(),
                                  db.ForeignKey('role.id')))
+
+organisations_projectmgrs = db.Table('organisations_projectmgrs',
+                                     db.Column('organisation_id', db.Integer(),
+                                               db.ForeignKey('organisation.id')),
+                                     db.Column('projectmgr_id', db.Integer(),
+                                               db.ForeignKey('projectmgr.id')))
+
+organisations_projects = db.Table('organisations_projects',
+                                  db.Column('organisation_id', db.Integer(),
+                                            db.ForeignKey('organisation.id')),
+                                  db.Column('project_id', db.Integer(),
+                                            db.ForeignKey('project.id')))
 
 
 class User(db.Model, UserMixin):
@@ -64,35 +72,6 @@ class User(db.Model, UserMixin):
     def is_authenticated(self):
         return True
 
-    @staticmethod
-    def encode_auth_token(user_id):
-        try:
-            payload = {
-                'exp': datetime.utcnow() + timedelta(
-                    days=current_app.config.get('TOKEN_EXPIRATION_DAYS'),
-                    seconds=current_app.config.get('TOKEN_EXPIRATION_SECONDS')
-                ),
-                'iat': datetime.utcnow(),
-                'sub': user_id
-            }
-            auth_token = jwtencode(payload,
-                                   current_app.config.get('SECRET_KEY'),
-                                   algorithm='HS256')
-            return auth_token
-        except Exception as e:
-            return e
-
-    @staticmethod
-    def decode_auth_token(auth_token):
-        try:
-            payload = jwtdecode(auth_token,
-                                current_app.config.get('SECRET_KEY'))
-            return payload['sub']
-        except ExpiredSignatureError:
-            return 'Signature Expired. Please log in again.'
-        except InvalidTokenError:
-            return 'Invalid Token. Please log in again.'
-
 
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
@@ -103,4 +82,49 @@ class Role(db.Model, RoleMixin):
         return self.name
 
     def __repr__(self):
-        return '<models.Rol[name=%s]>' % self.name
+        return '<models.Role[name=%s]>' % self.name
+
+
+class Organisation(db.Model):
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+    projectmgrs = db.relationship('Projectmgr',
+                                  secondary=organisations_projectmgrs,
+                                  backref=db.backref('organisations',
+                                                     lazy='dynamic'))
+    projects = db.relationship('Project', secondary=organisations_projects,
+                               backref=db.backref('organisations',
+                                                  lazy='dynamic'))
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return '<models.Organisation[name=%s]>' % self.name
+
+
+class Projectmgr(db.Model):
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return '<models.ProjectMgr[name=%s]>' % self.name
+
+
+class Project(db.Model):
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), unique=True)
+    project_mgr = db.Column(db.String(80))
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return '<models.Project[name=%s]>' % self.name
+
+

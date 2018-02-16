@@ -9,4 +9,5 @@ Flask-SQLAlchemy
 Flask-WTF
 gunicorn
 pyjwt
+sqlalchemy
 wtforms
