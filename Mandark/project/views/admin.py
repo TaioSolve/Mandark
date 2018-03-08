@@ -17,7 +17,7 @@ class AdminBaseView(BaseView):
             return redirect(url_for('main.index'))
 
 
-class AdminIndexView(AdminIndexView, AdminBaseView):
+class MyAdminIndexView(AdminIndexView, AdminBaseView):
     pass
 
 
@@ -39,7 +39,7 @@ class UserModelView(AdminModelView):
 
     def on_model_change(self, form, model, is_created):
         if form.password.data:
-            model.password = utils.encrypt_password(model.password)
+            model.password = utils.hash_password(model.password)
 
 
 class RoleModelView(AdminModelView):

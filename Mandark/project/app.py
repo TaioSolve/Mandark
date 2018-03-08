@@ -74,7 +74,7 @@ def create_app(config_object=ProductionConfig):
 
     app_admin = Admin(app, 'Administration Section',
                       template_mode='bootstrap3',
-                      index_view=admin.AdminIndexView())
+                      index_view=admin.MyAdminIndexView())
     app_admin.add_view(admin.UserModelView(models.User, db.session))
     app_admin.add_view(admin.RoleModelView(models.Role, db.session))
     app_admin.add_link(MenuLink(name='Back to Site', url='/'))
