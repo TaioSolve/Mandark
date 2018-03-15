@@ -1,13 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<body lang="en">
     <head>
-        <title>
-            {% if title %}
-                {{title}}
-            {% else %}
-                Mandark
-            {% endif %}
-        </title>
+        <title>{% if title %}{{title}}{% else %}Mandark{% endif %}</title>
         <meta charset="utf-8">
         <meta http-squiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,7 +19,7 @@
         {% block head %}
         {% endblock head %}
     </head>
-    <body role="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
         <header class="app-header navbar">
             <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
                 <span class="navbar-toggler-icon"></span>
@@ -37,89 +31,77 @@
             <ul class="nav navbar-nav d-md-down-none mr-auto">
             </ul>
         </header>
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls='navbar'>
-                    <span class="sr-only">Toggle nav</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="{{url_for('main.index')}}" class="navbar-brand"><span><img src={{url_for('static', filename="img/logo.png")}} class="logo" height='20px'/></span> Mandark</a>
+        <div class="app-body">
+            <div class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav">
+                        {% if g.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('main.index')}}"><i class="icon-speedometer"></i> Dashboard <span class="badge badge-info">NEW</span></a>
+                        </li>
+                            {% if g.user.is_admin %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{url_for('admin.index')}}"><i class="icon-speedometer"></i> Admin <span class="badge badge-info">NEW</span></a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </nav>
+                <button class="sidebar-minimizer brand-minimizer" type="button"></button>
             </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    {% if g.user.is_authenticated %}
-                    <li id="examplepage"><a href="{{url_for('main.examplepage')}}"><i class="fa fa-dashboard"></i> Example Page</a></li>
-                    <li id="exampleform"><a href="{{url_for('main.exampleform')}}"><i class="fa fa-reorder"></i> Example Form</a></li>
-                    <li id="profile"><a href="{{ url_for('main.profile') }}"><i class="fa fa-user"></i> Profile</a></li>
-                    {% if g.user.is_admin %}
-                    <li id="admin"><a href="{{url_for('admin.index')}}"><i class="fa fa-cog"></i> Admin</a></li>
-                    {% endif %}
-                    <li id="logout"><a href="{{url_for('security.logout')}}"><i class="fa fa-sign-out"></i> Logout</a></li>
-                    {% else %}
-                    <li id="login"><a href="{{url_for('security.login')}}"><i class="fa fa-sign-in"></i> Login</a></li>
-                    <li id="register"><a href="{{ url_for('security.register') }}"><i class="fa fa-user-plus"></i> Register</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container top-pad">
-    </div>
-        {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages|length %}
-        <div class="container">
-        {% for category, message in messages %}
-            {% if category == 'error' %}
-                <div class="alert alert-danger alert-dismissible fade in">
-            {% elif category == 'good' %}
-                <div class="alert alert-success alert-dismissible fade in">
-            {% elif category == 'warning' %}
-                <div class="alert alert-warning alert-dismissible fade in">
-            {% else %}
-                <div class="alert alert-info alert-dismissible fade in">
-            {% endif %}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{message}}
-            </div>
-        {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
-    <div class="container">
-    {% block content %}
+            <!-- Main content -->
+            <main class="main">
+                <div class="container-fluid">
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% if messages|length %}
+                            <div class="container">
+                            {% for category, message in messages %}
+                                {% if category == 'error' %}
+                                    <div class="alert alert-danger alert-dismissible fade in">
+                                {% elif category == 'good' %}
+                                    <div class="alert alert-success alert-dismissible fade in">
+                                {% elif category == 'warning' %}
+                                    <div class="alert alert-warning alert-dismissible fade in">
+                                {% else %}
+                                    <div class="alert alert-info alert-dismissible fade in">
+                                {% endif %}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                {{message}}
+                                </div>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
 
-    {% endblock content %}
-    </div>
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+            </main>
+        </div>
+        <footer class="footer footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <p class="text-muted text-center"> &copy; 2018 TaioSolve</p>
+                </div>
+                <div class="row text-center github">
+                    <a href="https://github.com/Taiosolve/mandark"><i class="fa fa-github fa-2x"></i></a>
+                </div>
+            </div>
+        </footer>
+
+        <footer class="footer">
+            {% block footer %}
+            {% endblock footer %}
+        </footer>
+        <script src="{{url_for('static', filename='vendors/js/jquery.min.js')}}"></script>
+        <script src="{{url_for('static', filename='vendors/js/popper.min.js')}}"></script>
+        <script src="{{url_for('static', filename='vendors/js/bootstrap.min.js')}}"></script>
+        <script src="{{url_for('static', filename='vendors/js/pace.min.js')}}"></script>
+
+        <!-- Mandark Pro main scripts -->
+
+        <script src="{{url_for('static', filename='js/app.js')}}"></script>
     </body>
-    <footer class="footer footer-bottom">
-        <div class="container">
-            <div class="row">
-                <p class="text-muted text-center"> &copy; 2018 TaioSolve</p>
-            </div>
-            <div class="row text-center github">
-                <a href="https://github.com/Taiosolve/mandark"><i class="fa fa-github fa-2x"></i></a>
-            </div>
-        </div>
-    </footer>
-
-    <footer class="footer">
-        {% block footer %}
-
-        {% endblock footer %}
-    </footer>
-
-    <!-- Bootstrap and necessary plugins -->
-    <script src="{{url_for('static', filename='vendors/js/jquery.min.js')}}"></script>
-    <script src="{{url_for('static', filename='vendors/js/popper.min.js')}}"></script>
-    <script src="{{url_for('static', filename='vendors/js/bootstrap.min.js')}}"></script>
-    <script src="{{url_for('static', filename='vendors/js/pace.min.js')}}"></script>
-
-  <!-- Mandark Pro main scripts -->
-
-  <script src="{{url_for('static', filename='js/app.js')}}"></script>
 </html>

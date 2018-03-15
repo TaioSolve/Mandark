@@ -38,7 +38,8 @@ def create_app(config_object=ProductionConfig):
         g.user = current_user
 
     @app.errorhandler(404)
-    def not_found_error():
+    def not_found_error(e):
+        print(e)
         return render_template('404.html', title='FourOhFour')
 
     @app.errorhandler(500)
