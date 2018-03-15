@@ -20,9 +20,9 @@ csrf = CSRFProtect()
 
 def create_app(config_object=ProductionConfig):
     app = Flask(__name__)
-    Sentry(app, dsn='https://1fc1a5fea77b4b3c9f4edcf29807e5d4:de25524c893345b1ab6f3fe165131f9e@sentry.io/300199')  # noqa
+    # Sentry(app, dsn='https://1fc1a5fea77b4b3c9f4edcf29807e5d4:de25524c893345b1ab6f3fe165131f9e@sentry.io/300199')  # noqa
 
-    CORS(app)
+    # CORS(app)
     app.config.from_object(config_object)
 
     db.init_app(app)
@@ -89,6 +89,10 @@ def create_app(config_object=ProductionConfig):
                                                  db.session))
     app_admin.add_view(admin.OrganisationModelView(models.Organisation,
                                                    db.session))
+    app_admin.add_view(admin.ChangeRequestTypeView(models.ChangeRequestType,
+                                                   db.session))
+    app_admin.add_view(admin.ChangeRequestSubmitterView(
+        models.ChangeRequestSubmitter, db.session))
     app_admin.add_link(MenuLink(name='Back to Site', url='/'))
 
     return app

@@ -1,5 +1,5 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>
             {% if title %}
@@ -10,15 +10,33 @@
         </title>
         <meta charset="utf-8">
         <meta http-squiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{url_for('static', filename='bootstrap/css/bootstrap.css')}}">
-        <link rel="stylesheet" href="{{url_for('static', filename='Font-Awesome/css/font-awesome.min.css')}}">
-        <link rel="stylesheet" href="{{url_for('static', filename='custom/custom.css')}}">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Mandark Pro - Changelog Manager">
+        <meta name="author" content="InfrasCloudy">
+        <meta name="keyword" content=",">
+        <link rel="stylesheet" href="{{url_for('static', filename='vendors/css/flag-icon.min.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='vendors/css/font-awesome.min.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='vendors/css/simple-line-icons.min.css')}}">
+
+        <!-- Main styles for this application -->
+        <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet">
+
         <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}">
         {% block head %}
         {% endblock head %}
     </head>
-    <body role="document">
+    <body role="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+        <header class="app-header navbar">
+            <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#"></a>
+            <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav d-md-down-none mr-auto">
+            </ul>
+        </header>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container fluid">
             <div class="navbar-header">
@@ -90,10 +108,18 @@
     </footer>
 
     <footer class="footer">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
         {% block footer %}
 
         {% endblock footer %}
     </footer>
+
+    <!-- Bootstrap and necessary plugins -->
+    <script src="{{url_for('static', filename='vendors/js/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename='vendors/js/popper.min.js')}}"></script>
+    <script src="{{url_for('static', filename='vendors/js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='vendors/js/pace.min.js')}}"></script>
+
+  <!-- Mandark Pro main scripts -->
+
+  <script src="{{url_for('static', filename='js/app.js')}}"></script>
 </html>

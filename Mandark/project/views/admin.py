@@ -61,3 +61,10 @@ class ProjectMgrModelView(AdminModelView):
 class OrganisationModelView(AdminModelView):
     pass
 
+
+class ChangeRequestTypeView(AdminModelView):
+    pass
+
+
+class ChangeRequestSubmitterView(AdminModelView):
+    pass
