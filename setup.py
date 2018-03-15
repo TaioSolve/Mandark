@@ -237,14 +237,12 @@ setup_dict = dict(
     # <http://pypi.python.org/pypi?%3Aaction=list_classifiers>
     classifiers=[
         'Development Status :: 1 - Planning',
-        'Environment :: Console',
+        'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Documentation',
         'Topic :: Software Development :: Libraries :: Python Modules',

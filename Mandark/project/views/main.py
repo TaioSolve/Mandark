@@ -36,3 +36,8 @@ def exampleform():
 @main.route('/break')
 def breakit():
     raise Exception
+
+
+@main.route('/profile')
+def profile():
+    return render_template('security/user_profile.html')

@@ -10,6 +10,7 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from Mandark.project.config import ProductionConfig
 from sqlalchemy.exc import OperationalError
+from raven.contrib.flask import Sentry
 
 
 db = SQLAlchemy()
@@ -19,6 +20,8 @@ csrf = CSRFProtect()
 
 def create_app(config_object=ProductionConfig):
     app = Flask(__name__)
+    Sentry(app, dsn='https://1fc1a5fea77b4b3c9f4edcf29807e5d4:de25524c893345b1ab6f3fe165131f9e@sentry.io/300199')  # noqa
+
     CORS(app)
     app.config.from_object(config_object)
 
@@ -46,6 +49,10 @@ def create_app(config_object=ProductionConfig):
         with app.app_context():
             userstore.find_or_create_role(name='admin',
                                           description='Administrator')
+            userstore.find_or_create_role(name='moderator',
+                                          description='Moderator')
+            userstore.find_or_create_role(name='projectmgr',
+                                          description='Project Manager')
             userstore.find_or_create_role(name='user',
                                           description='General User')
             userstore.create_user(email='admin@taiosolve.xyz',
@@ -77,6 +84,11 @@ def create_app(config_object=ProductionConfig):
                       index_view=admin.MyAdminIndexView())
     app_admin.add_view(admin.UserModelView(models.User, db.session))
     app_admin.add_view(admin.RoleModelView(models.Role, db.session))
+    app_admin.add_view(admin.ProjectModelView(models.Project, db.session))
+    app_admin.add_view(admin.ProjectMgrModelView(models.Projectmgr,
+                                                 db.session))
+    app_admin.add_view(admin.OrganisationModelView(models.Organisation,
+                                                   db.session))
     app_admin.add_link(MenuLink(name='Back to Site', url='/'))
 
     return app

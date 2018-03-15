@@ -2,7 +2,7 @@ from flask_admin import AdminIndexView, BaseView
 from flask_security import current_user, utils
 from flask_admin.contrib.sqla.view import ModelView
 from flask import redirect, url_for, flash
-from wtforms import PasswordField, validators
+from wtforms import PasswordField, validators, StringField
 
 
 class AdminBaseView(BaseView):
@@ -34,8 +34,12 @@ class UserModelView(AdminModelView):
     form_extra_fields = {'password2': PasswordField('Confirm Password',
                                                     [validators.EqualTo(
                                                         'password',
-                                                        message='Passwords must match')])}  # noqa
-    form_columns = ('roles', 'email', 'password', 'password2', 'active')
+                                                        message='Passwords must match')]),  # noqa
+                         'first_name': StringField('First Name', [validators.DataRequired()]),  # noqa
+                         'last_name': StringField('Last Name', [validators.DataRequired()]),  # noqa
+                         }
+    form_columns = ('first_name', 'last_name', 'roles', 'email', 'password',
+                    'password2', 'active')
 
     def on_model_change(self, form, model, is_created):
         if form.password.data:
@@ -44,3 +48,16 @@ class UserModelView(AdminModelView):
 
 class RoleModelView(AdminModelView):
     pass
+
+
+class ProjectModelView(AdminModelView):
+    pass
+
+
+class ProjectMgrModelView(AdminModelView):
+    pass
+
+
+class OrganisationModelView(AdminModelView):
+    pass
+
